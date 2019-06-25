@@ -13,6 +13,7 @@ import prayer from "../prayer.svg";
 import axios from "axios";
 import { PropTypes } from "prop-types";
 import { withStyles } from "@material-ui/core";
+import https from "https";
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;
@@ -23,95 +24,156 @@ const styles = theme => ({
     width: "100%"
   }
 });
+const today = new Date();
 
 class PrayerTimes extends React.Component {
   state = {
-    open: false,
-    todayHijri: "",
-    hijriWeekday: "",
-    hijriDay: "",
-    hijriMonth: "",
-    hijriYear: ""
+    open: false
+  };
+  handleApiCall = () => {
+    let englishMonth;
+    let englishDay;
+    let englishYear;
+    englishMonth = today.getMonth() + 1;
+    englishDay = today.getDate();
+    englishYear = today.getFullYear();
+    const fullDate = `${englishYear}-${englishMonth}-${englishDay}`;
+    console.log(fullDate);
+    axios
+      .get("/api/hijri/prayer/", {
+        params: {
+          date: fullDate
+          // date: "2019-7-4"
+        }
+      })
+      .then(res => {
+        // res.json();
+        const athanData = JSON.parse(res.data);
+        console.log(athanData);
+        const hijriMonth = athanData.hijri.month;
+        const hijriDay = athanData.hijri.day;
+        const hijriYear = athanData.hijri.year;
+        const hijriMonthNum = athanData.hijri.month_numeric;
+        const adhanFajr = athanData.adhan.Fajr;
+        const adhanShuruq = athanData.adhan.Shuruq;
+        const adhanDhuhr = athanData.adhan.Dhuhr;
+        const adhanAsr = athanData.adhan.Asr;
+        const adhanMaghrib = athanData.adhan.Maghrib;
+        const adhanIsha = athanData.adhan.Isha;
+        const iqamahFajr = athanData.iqamah.Fajr;
+        const iqamahShuruq = athanData.iqamah.Shuruq;
+        const iqamahDhuhr = athanData.iqamah.Dhuhr;
+        const iqamahAsr = athanData.iqamah.Asr;
+        const iqamahMaghrib = athanData.iqamah.Maghrib;
+        const iqamahIsha = athanData.iqamah.Isha;
+        this.setState({
+          hijriMonth,
+          hijriDay,
+          hijriYear,
+          hijriMonthNum,
+          adhanFajr,
+          adhanShuruq,
+          adhanDhuhr,
+          adhanAsr,
+          adhanMaghrib,
+          adhanIsha,
+          iqamahFajr,
+          iqamahShuruq,
+          iqamahDhuhr,
+          iqamahAsr,
+          iqamahMaghrib,
+          iqamahIsha,
+          today,
+          englishDay,
+          englishMonth,
+          englishYear
+        });
+        console.log(res.data);
+        console.log({
+          hijriMonth,
+          hijriDay,
+          hijriYear,
+          hijriMonthNum,
+          adhanFajr,
+          adhanShuruq,
+          adhanDhuhr,
+          adhanAsr,
+          adhanMaghrib,
+          adhanIsha,
+          iqamahFajr,
+          iqamahShuruq,
+          iqamahDhuhr,
+          iqamahAsr,
+          iqamahMaghrib,
+          iqamahIsha
+        });
+      });
   };
   componentDidMount() {
-    axios.get(`https://api.aladhan.com/v1/hToG`).then(res => {
-      // const todayHijri = res.data;
-      const todayGregorian = res.data.data.gregorian;
-      const gregorianDay = todayGregorian.day;
-      const gregorianWeekday = todayGregorian.weekday.en;
-      const gregorianMonth = todayGregorian.month.en;
-      const gregorianYear = todayGregorian.year;
-      const todayHijri = res.data.data.hijri;
-      const hijriDay = todayHijri.day;
-      const hijriWeekday = todayHijri.weekday.en;
-      const hijriMonth = todayHijri.month.en;
-      const hijriYear = todayHijri.year;
-      this.setState({
-        todayGregorian,
-        gregorianWeekday,
-        gregorianDay,
-        gregorianMonth,
-        gregorianYear,
-        todayHijri,
-        hijriWeekday,
-        hijriDay,
-        hijriMonth,
-        hijriYear
-      });
-      console.log(res.data);
-      console.log({
-        todayHijri,
-        todayGregorian
-      });
-    });
+    this.handleApiCall();
   }
+
+  handleNextDay = () => {
+    const { today } = this.state;
+    today.setDate(today.getDate() + 1);
+    this.setState({ today: today });
+    this.handleApiCall();
+  };
+
+  handlePastDay = () => {
+    const { today } = this.state;
+    today.setDate(today.getDate() - 1);
+    this.setState({ today: today });
+    this.handleApiCall();
+  };
 
   handleClickOpen = () => {
     this.setState({ open: true });
   };
 
   handleClose = () => {
-    this.setState({ open: false });
+    const { today } = this.state;
+    let resetToday = new Date();
+    today.setDate(resetToday.getDate());
+    this.handleApiCall();
+    this.setState({ open: false, today: today });
   };
-
-  // handleNextDay = () => {
-  //   this.date = date.addDays(1);
-  // };
 
   render() {
     const { classes } = this.props;
-
     const {
-      todayGregorian,
-      gregorianWeekday,
-      gregorianDay,
-      gregorianMonth,
-      gregorianYear,
-      todayHijri,
-      hijriWeekday,
-      hijriDay,
       hijriMonth,
-      hijriYear
+      hijriDay,
+      hijriYear,
+      hijriMonthNum,
+      adhanFajr,
+      adhanShuruq,
+      adhanDhuhr,
+      adhanAsr,
+      adhanMaghrib,
+      adhanIsha,
+      iqamahFajr,
+      iqamahDhuhr,
+      iqamahAsr,
+      iqamahMaghrib,
+      iqamahIsha
     } = this.state;
-    Date.prototype.addDays = function(days) {
-      var date = new Date(this.valueOf());
-      date.setDate(date.getDate() + days);
-      return date;
-    };
-    const date = new Date(); // /today
-    console.log(date);
-
-    const times = prayTimes.getTimes(date, [35.790013, -78.691178], -5);
-    const days = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday"
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
     ];
-
+    const { today, englishMonth, englishDay, englishYear } = this.state;
+    const englishMonthName = months[englishMonth - 1];
     return (
       <ModalContainer>
         <IconButton onClick={this.handleClickOpen}>
@@ -133,11 +195,10 @@ class PrayerTimes extends React.Component {
           </DialogTitle>
           <DialogContent>
             <p className="text-left">
-              {gregorianWeekday}, {gregorianMonth} {gregorianDay},{" "}
-              {gregorianYear}
+              {englishMonthName} {englishDay}, {englishYear}
             </p>
             <p className="text-left">
-              {hijriWeekday}, {hijriMonth} {hijriDay}, {hijriYear}
+              {hijriMonth} {hijriDay}, {hijriYear}
             </p>
             {/* <button onClick={(this.date = date.setDate(date.getDate() + 1))}>
               next
@@ -148,39 +209,52 @@ class PrayerTimes extends React.Component {
                 <thead>
                   <tr>
                     <th scope="col">Prayer</th>
-                    <th scope="col">Time</th>
+                    <th scope="col">Athan</th>
+                    <th scope="col">Iqamah</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <th scope="row">Fajr</th>
-                    <td>{times["Fajr".toLowerCase()]}</td>
+                    <td>{adhanFajr}</td>
+                    <td>{iqamahFajr}</td>
                   </tr>
                   <tr>
                     <th scope="row">Shuruq</th>
-                    <td>{times["Sunrise".toLowerCase()]}</td>
+                    <td>{adhanShuruq}</td>
+                    <td />
                   </tr>
                   <tr>
                     <th scope="row">Dhuhr</th>
-                    <td>{times["Dhuhr".toLowerCase()]}</td>
+                    <td>{adhanDhuhr}</td>
+                    <td>{iqamahDhuhr}</td>
                   </tr>
                   <tr>
                     <th scope="row">Asr</th>
-                    <td>{times["Asr".toLowerCase()]}</td>
+                    <td>{adhanAsr}</td>
+                    <td>{iqamahAsr}</td>
                   </tr>
                   <tr>
                     <th scope="row">Maghrib</th>
-                    <td>{times["Maghrib".toLowerCase()]}</td>
+                    <td>{adhanMaghrib}</td>
+                    <td>{iqamahMaghrib}</td>
                   </tr>
                   <tr>
                     <th scope="row">Isha</th>
-                    <td>{times["Isha".toLowerCase()]}</td>
+                    <td>{adhanIsha}</td>
+                    <td>{iqamahIsha}</td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </DialogContent>
           <DialogActions>
+            <Button onClick={this.handlePastDay} color="primary">
+              Previous
+            </Button>
+            <Button onClick={this.handleNextDay} color="primary">
+              Next
+            </Button>
             <Button onClick={this.handleClose} color="primary">
               Close
             </Button>

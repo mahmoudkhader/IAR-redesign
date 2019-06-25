@@ -1,2 +1,4 @@
-node_modules
+/node_modules
+/design_concept_files
+/fonts
 /config/keys_dev.js

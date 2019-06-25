@@ -4,8 +4,6 @@
 const express = require("express");
 // When we create a route, we call this with router.get
 const router = express.Router();
-// Bring in Gravatar
-const gravatar = require("gravatar");
 // Bring in BCrypt
 const bcrypt = require("bcryptjs");
 //Bring in Json Web Token
@@ -60,18 +58,10 @@ router.post("/register", (req, res) => {
     } else {
       // if the user doesn't exist, create a new user
       //  when creating a user with mongoose you want to say "new" and then "whatever model name"
-      // first, request or create new gravatar
-      const avatar = gravatar.url(req.body.email, {
-        s: "200", //size of avatar
-        r: "pg", //Rating
-        d: "mm" // default
-      });
 
       const newUser = new User({
         name: req.body.name,
         email: req.body.email,
-        // Here we will install and include gravatar
-        avatar,
         // We also need to hash the password, so look up top where we bring in bcrypt
         password: req.body.password
       });

@@ -169,7 +169,7 @@ class Navbar extends React.Component {
                 </a>
               </Typography>
               <div className={classes.grow} />
-              {isWidthUp("sm", this.props.width) ? (
+              {/* {isWidthUp("sm", this.props.width) ? (
                 <div className={classes.search}>
                   <div className={classes.searchIcon}>
                     <SearchIcon />
@@ -188,7 +188,7 @@ class Navbar extends React.Component {
                     <SearchIcon />
                   </IconButton>
                 </div>
-              )}
+              )} */}
               <PrayerTimes />
             </Toolbar>
           </AppBar>

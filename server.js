@@ -41,7 +41,20 @@ require("./config/passport")(passport);
 // reference: https://sailsjs.com/documentation/reference/response-res/res-send
 // app.get("/", (req, res) => res.send("Hello Potato!"));
  */
-
+app.use(function(req, res, next) {
+  //allow cross origin requests
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "POST, PUT, OPTIONS, DELETE, GET"
+  );
+  res.header("Access-Control-Allow-Origin", "localhost:3000");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  res.header("Access-Control-Allow-Credentials", true);
+  next();
+});
 // Use routes
 app.use("/api/users", users);
 app.use("/api/profile", profile);
