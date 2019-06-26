@@ -79,15 +79,23 @@ app.use("/api/hijri", hijri);
 // const port = process.env.PORT || 5000;
 // const port = 5000;
 
-if (process.env.NODE_ENV === "production") {
-  // Set static folder
-  app.use(express.static("client/build"));
+// if (process.env.NODE_ENV === "production") {
+//   // Set static folder
+//   app.use(express.static("client/build"));
 
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
-  });
-}
-const port = process.env.PORT || 5000;
+//   app.get("*", (req, res) => {
+//     res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+//   });
+// }
+// const port = process.env.PORT || 5000;
+
+app.use(express.static(path.join(__dirname, "client", "build")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+});
+
+const port = 5000;
 
 // Pass in the port that we want the app to listen to
 app.listen(port, () => console.log(`Server running on port ${port}`));

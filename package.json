@@ -22,7 +22,12 @@
     "start": "node server.js",
     "server": "nodemon server.js",
     "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run client\" \"npm run server\""
+    "client-build": "npm run build --prefix client",
+    "client-serve": "serve -s client/build",
+    "static": "concurrently \"npm start\" \"npm run client\"",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "build": "concurrently \"npm run server\" \"npm run client-build\"",
+    "serve": "concurrently \"npm run server\" \"npm run client-serve\""
   },
   "author": "Mahmoud Khader",
   "license": "ISC"
