@@ -90,16 +90,19 @@ app.use("/api/hijri", hijri);
 // const port = process.env.PORT || 5000;
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, "client/build")));
+if (process.env.NODE_ENV === "production") {
+  // Set static folder
 
-// The "catchall" handler: for any request that doesn't
-// match one above, send back React's index.html file.
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname + "/client/build/index.html"));
-});
+  app.use(express.static(path.join(__dirname, "client/build")));
 
+  // The "catchall" handler: for any request that doesn't
+  // match one above, send back React's index.html file.
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname + "/client/build/index.html"));
+  });
+}
 // const port = process.env.PORT || 9000;
-const port = 9000;
+const port = process.env.PORT || 9000;
 
 // Pass in the port that we want the app to listen to
 app.listen(port, () => console.log(`Server running on port ${port}`));
