@@ -108,9 +108,6 @@ class SidebarIslam extends Component {
             <List component="div" disablePadding>
               <Link to="Imams">
                 <ListItem button className={classes.nested}>
-                  <ListItemIcon>
-                    <StarBorder />
-                  </ListItemIcon>
                   <ListItemText inset primary="Imams of IAR" />
                 </ListItem>
               </Link>

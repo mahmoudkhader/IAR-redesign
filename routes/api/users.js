@@ -149,7 +149,8 @@ router.post("/login", (req, res) => {
             const payload = {
               id: user.id,
               name: user.name,
-              avatar: user.avatar
+              name: user.email,
+              access: user.access
             }; // this creates a JWT payload
             // secret/key - this will be put in config/keys.js. Now, since it is defined in that file, we need to bring keys.js in (check up top), and that is keys.secretOrKey
             // expiration - this will be an object that defines the milliseconds of how long the token will work before it expires
@@ -196,7 +197,8 @@ router.get(
     res.json({
       id: req.user.id,
       name: req.user.name,
-      email: req.user.email
+      email: req.user.email,
+      access: req.user.access
     });
   }
 );

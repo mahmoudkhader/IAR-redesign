@@ -1,0 +1,39 @@
+Components to build:
+
+BACKEND - 
+    1. Create new pages using draft.js
+        1. Requires an api route and a mongo collection
+        2. Component to read an item from mongo basedd on the url
+        3. See and edit all pages with protected privileges
+        4. Protected views: only authorized access can modify the pages
+        5. Dedicated pages should appear on the sidebar nav (specified in json object)
+
+    2. Create new announcement posts using draft.js
+        1. Same structure as the pages
+        2. Posts should have dedicated pages, but don't need to appear on the sidebar
+        3. Both the raw text and the html should be stored. The HTML for the page and the raw text for updates
+    
+    3. Events
+        1. This component should contain all events
+        2. Follows same structure as above
+
+    4. User management 
+        1. Should be able to modify user access from the CMS admin login
+
+    5. Admin login portal: www.raleighmasjid.org/adminportal
+
+FRONTEND - 
+    1. Navbar
+        1. Search bar: should query for all pages, announcements, and events
+        2. Prayer popup: queries api and retrieves prayer info
+        3. Sidebar: thhis should grab an array of all the dedicated nav pages
+
+    2. Home page
+        1. Upcoming events
+        2. IAR quick facts
+        3. Announcements
+        4. Imams
+        5. Contact info
+        6. Important updates (part of announcements, but must be configured)
+
+    3. Pages component - content loaded dynamically based on 

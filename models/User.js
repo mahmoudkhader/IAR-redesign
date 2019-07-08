@@ -20,9 +20,9 @@ const UserSchema = new Schema({
     type: String,
     require: true
   },
-  avatar: {
-    // For avatar, when they put in email in the registration there will be logic that hits the avatar server to get the image, then will put it here. If not, will put a placeholder
-    type: String
+  access: {
+    type: String,
+    default: "none"
   },
   date: {
     type: Date,
